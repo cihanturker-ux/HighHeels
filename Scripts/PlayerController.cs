@@ -26,7 +26,8 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.CompareTag("Heel") && heelNumber==1){
-            parent.transform.position += new Vector3(0,0.2f,0); // topuk boyuna göre ayarlanacak
+            parent.transform.position = col.gameObject.transform.position;
+            parent.transform.position += new Vector3(0,0.2f,0);
             heelNumber=2;
         }
         if(col.gameObject.CompareTag("Obstacle")){
