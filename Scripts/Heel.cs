@@ -10,7 +10,7 @@ public class Heel : MonoBehaviour
         public GameObject personPlayer;
         private PlayerController playerControllerScript;
      void Start() {
-        theJoint = GetComponent<FixedJoint>(); // character joint
+        theJoint = GetComponent<FixedJoint>();
         playerControllerScript = personPlayer.GetComponent<PlayerController>();
 
     }
@@ -28,7 +28,7 @@ public class Heel : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Heel")){
             rb.useGravity=false;
-            parent.transform.position += new Vector3(0,0.2f,0); // topuk boyuna göre ayarlanacak
+            parent.transform.position += new Vector3(0,0.2f,0);
             theJoint.connectedBody =rb;
             playerControllerScript.childs.Add(gameObject);        
         }
