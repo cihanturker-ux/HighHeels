@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     public int heelNumber=1;
 
     protected Joystick joystick;
-    protected JoyButton joyButton;
 
     private Vector3 movement;
     private int speed = 1;
@@ -19,7 +18,6 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>(); 
         joystick=FindObjectOfType<Joystick>();
-        joyButton=FindObjectOfType<JoyButton>();
 
 
     } 
