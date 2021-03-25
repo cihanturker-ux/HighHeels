@@ -5,67 +5,86 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    
+    
     public static PlayerController instance;
+    public Animator _animator;
+    
     [SerializeField] float horizontalConstantSpeed = 0.05f;
 
     float xPosition;
     Rigidbody rb;
-    float firstFinger, lastFinger , distanceBetweenTouches = 0;
-    [SerializeField] float borderOfRoad = 3.8f;
+    float distanceBetweenTouches = 0;
+    [SerializeField] float borderOfRoad = 2.14f;
+    
+    
+    //mobil
+    public bool _isRight;
+    public bool _isLeft;
+    public bool _isFirstMove;
+    public bool _planeMove;
+    private float _touchCount;
+    private Touch _isTouch;
+    public float _touchXPosTwo;
+    public float _touchXPosFirst;
 
-    // Update is called once per frame
+    private void Awake()
+    {
+        instance = this;
+        _isRight = false;
+        _isFirstMove = false;
+        _isLeft = false;
+        rb = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
+    }
+    
     void Update()
     {
         MoveHorizontalWithPc();
-
-        foreach (Touch touch in Input.touches)
-        {
-            if(firstFinger == 0)
-            {
-                firstFinger = touch.position.x;
-                lastFinger = touch.position.x;
-            }
-            else
-            {
-                lastFinger = touch.position.x;
-                distanceBetweenTouches = lastFinger - firstFinger;
-                firstFinger = lastFinger;
-            }
-        }
-
-        if(distanceBetweenTouches > 0)
-        {
-            MoveHorizontal(false);
-            print("left");
-        }
-        else if(distanceBetweenTouches < 0)
-        {
-            print("right");
-            MoveHorizontal(true);
-        }
+        MoveHorizontalMobile();
     }
 
-
-    private void MoveHorizontal(bool isLeft)
+    private void MoveHorizontalMobile()
     {
-        xPosition = transform.localPosition.x;
-        distanceBetweenTouches = 0;
-
-        if (isLeft)
+        _touchCount = Input.touchCount;
+        if (_touchCount > 0)
         {
-            if(xPosition > -borderOfRoad)
+            _isTouch = Input.GetTouch(0);
+            if (_isTouch.phase == TouchPhase.Began)
             {
-                transform.position -= new Vector3(horizontalConstantSpeed, 0, 0);
+                _touchXPosFirst = Input.mousePosition.x;
+                _isFirstMove = true;
+            }
+            else if (_isTouch.phase == TouchPhase.Moved)
+            {
+                // Dokunma Devam ediyor parmagını hareket ettiriyor.
+                // X konumunu algıla
+                _touchXPosTwo = Input.mousePosition.x;
+                if (_touchXPosFirst > _touchXPosTwo)
+                {
+                    // Sola gidiyor.
+                    _isRight = false;
+                    _isLeft = true;
+                    transform.position -= new Vector3(horizontalConstantSpeed, 0, 0);
+                }
+                else if (_touchXPosFirst < _touchXPosTwo)
+                {
+                    // Saga gidiyor.
+                    _isLeft = false;
+                    _isRight = true;
+                    transform.position += new Vector3(horizontalConstantSpeed, 0, 0);
+                }
+            }
+            else if (_isTouch.phase == TouchPhase.Ended)
+            {
+                // Elini çekti
+                _isLeft = false;
+                _isRight = false;
             }
         } 
-        else if(!isLeft){
-            if(xPosition < borderOfRoad)
-            {
-                transform.position += new Vector3(horizontalConstantSpeed, 0, 0);
-            }
-           
-        }
     }
+    
+    
     private void MoveHorizontalWithPc()
     {
         xPosition = transform.localPosition.x;
@@ -86,8 +105,7 @@ public class PlayerController : MonoBehaviour
             }
            
         }
-
-        
     }
+    
 
 }
