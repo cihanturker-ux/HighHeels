@@ -9,7 +9,7 @@ public class AnimatePlayer : MonoBehaviour
     public static AnimatePlayer instance;
     
     Rigidbody rb;
-    [SerializeField] float speed = 5;
+    public float speed = 5;
     Vector3 stepPosition;
     GameObject player;
 
@@ -36,12 +36,20 @@ public class AnimatePlayer : MonoBehaviour
         rb.velocity = new Vector3(0, 0, speed);
         
     }
-    
+
     public void PlayerPosUp()
     {
         Vector3 playerpos = transform.localPosition;
         playerpos.y += .5f;
         transform.localPosition = playerpos;
+    }
+    
+    public void PlayerPosDown(float amount)
+    {
+        Vector3 playerpos = transform.localPosition;
+        playerpos.y -= amount;
+        transform.localPosition = playerpos;
+
     }
     
 }
